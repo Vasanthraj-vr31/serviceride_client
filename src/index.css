@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+/* Use explicit CSS here to avoid @apply pre-transform issues in some setups */
+body {
+    background-color: #000000;
+    color: #10b981; /* approx. Tailwind green-500 */
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
