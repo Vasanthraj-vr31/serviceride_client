@@ -25,7 +25,7 @@ const Service = () => {
     // Fetch services on load
     const fetchServices = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/services');
+        const res = await axios.get('https://serviceride-server.onrender.com/api/services');
         setServices(res.data);
       } catch (err) {
         console.error("Error fetching services", err);
@@ -49,7 +49,7 @@ const Service = () => {
         licensePlate: formData.vehicleNumber
       };
 
-      const vehicleRes = await axios.post('http://localhost:5000/api/vehicles', vehicleData, authConfig);
+      const vehicleRes = await axios.post('https://serviceride-server.onrender.com/api/vehicles', vehicleData, authConfig);
       const newVehicleId = vehicleRes.data.vehicle._id;
 
       // 2. Create Booking
@@ -68,7 +68,7 @@ const Service = () => {
         }
       };
 
-      await axios.post('http://localhost:5000/api/booking', bookingData, authConfig);
+      await axios.post('https://serviceride-server.onrender.com/api/booking', bookingData, authConfig);
 
       alert("Service Booked Successfully!");
       navigate('/'); // Redirect to home on success
