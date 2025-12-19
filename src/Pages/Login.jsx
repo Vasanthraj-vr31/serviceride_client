@@ -3,12 +3,39 @@ import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const navigate = useNavigate();
-    const [formData, HZ] = useState({ email: '', password: '' });
+    const [formData, setFormData] = useState({ email: '', password: '' });
 
-    const handleSubmit = (e) => {
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.type]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulate login success
-        navigate('/service');
+        try {
+            const response = await fetch('http://localhost:5000/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem('token', data.token);
+                // navigate('/service');
+                window.location.href = '/service';
+            } else if (response.status === 404) {
+                const wantToSignup = window.confirm("User not found. Would you like to sign up?");
+                if (wantToSignup) {
+                    navigate('/signup');
+                }
+            } else {
+                alert(data.message || 'Login failed');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('Something went wrong. Please try again.');
+        }
     }
 
     return (
@@ -21,6 +48,8 @@ const Login = () => {
                         <input
                             type="email"
                             required
+                            value={formData.email}
+                            onChange={handleChange}
                             className="w-full p-3 bg-gray-900 border border-green-500/50 rounded text-white focus:outline-none focus:border-green-500"
                             placeholder="Enter your email"
                         />
@@ -30,6 +59,8 @@ const Login = () => {
                         <input
                             type="password"
                             required
+                            value={formData.password}
+                            onChange={handleChange}
                             className="w-full p-3 bg-gray-900 border border-green-500/50 rounded text-white focus:outline-none focus:border-green-500"
                             placeholder="Enter your password"
                         />
